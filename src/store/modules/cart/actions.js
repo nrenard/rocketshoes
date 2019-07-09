@@ -1,8 +1,17 @@
 import { Types } from './reducer';
 
-export function addToCart(product) {
+export function addToCartRequest(id) {
   return {
-    type: Types.ADD,
+    type: Types.ADD_REQUEST,
+    payload: {
+      id,
+    },
+  };
+}
+
+export function addToCartSuccess(product) {
+  return {
+    type: Types.ADD_REQUEST_SUCCESS,
     payload: {
       product,
     },

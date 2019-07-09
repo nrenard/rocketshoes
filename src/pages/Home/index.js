@@ -12,7 +12,7 @@ import api from '../../services/api';
 
 import { ProductList } from './styles';
 
-function Home({ amount, cart, addToCart }) {
+function Home({ amount, cart, addToCartRequest }) {
   const [products, handleChangeProducts] = useState([]);
 
   const getProdutcs = async () => {
@@ -39,7 +39,7 @@ function Home({ amount, cart, addToCart }) {
             <strong>{product.title}</strong>
             <span>{product.priceFormated}</span>
 
-            <button type="button" onClick={() => addToCart(product)}>
+            <button type="button" onClick={() => addToCartRequest(product.id)}>
               <div>
                 <MdAddShoppingCart size={16} color="#fff" />
                 {amount[product.id] || 0}

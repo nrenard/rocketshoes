@@ -5,7 +5,8 @@ export const Types = {
   ADD_REQUEST_SUCCESS: '@cart/ADD_REQUEST_SUCCESS',
 
   REMOVE: '@cart/REMOVE',
-  UPDATE_AMOUNT: '@cart/UPDATE_AMOUNT',
+  UPDATE_AMOUNT_REQUEST: '@cart/UPDATE_AMOUNT_REQUEST',
+  UPDATE_AMOUNT_SUCCESS: '@cart/UPDATE_AMOUNT_SUCCESS',
 };
 
 const INITIAL_STATE = {
@@ -26,9 +27,7 @@ export default function cart(state = INITIAL_STATE, { type, payload }) {
         if (productIndex >= 0) draft.list.splice(productIndex, 1);
       });
 
-    case Types.UPDATE_AMOUNT: {
-      if (payload.amount <= 0) return state;
-
+    case Types.UPDATE_AMOUNT_SUCCESS: {
       return produce(state, (draft) => {
         const productIndex = draft.list.findIndex(p => p.id === payload.id);
         if (productIndex >= 0) {

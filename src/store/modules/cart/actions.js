@@ -22,6 +22,10 @@ export function removeFormCart(id) {
   return { type: Types.REMOVE, payload: { id } };
 }
 
-export function updateAmount(id, amount) {
-  return { type: Types.UPDATE_AMOUNT, payload: { id, amount } };
+export function updateAmountRequest(id, amount) {
+  return { type: Types.UPDATE_AMOUNT_REQUEST, payload: { id, amount } };
+}
+
+export function updateAmountSuccess(id, amount) {
+  return { type: Types.UPDATE_AMOUNT_SUCCESS, payload: { id, amount } };
 }

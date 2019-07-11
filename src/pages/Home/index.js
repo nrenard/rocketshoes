@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { MdAddShoppingCart } from 'react-icons/md';
 
@@ -12,21 +11,27 @@ import api from '../../services/api';
 
 import { ProductList } from './styles';
 
-function Home({ amount, cart, addToCartRequest }) {
-  const [products, handleChangeProducts] = useState([]);
+export default function Home() {
+  const [products, setProducts] = useState([]);
+  const amount = useSelector(state => state.cart.list.reduce((sumAmount, product) => {
+    sumAmount[product.id] = product.amount || 0;
+    return sumAmount;
+  }, {}));
 
-  const getProdutcs = async () => {
-    const { data } = await api.get('/products');
-
-    const listProduct = data.map(product => ({
-      ...product,
-      priceFormated: formatPrice(product.price),
-    }));
-
-    handleChangeProducts(listProduct);
-  };
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    async function getProdutcs() {
+      const { data } = await api.get('/products');
+
+      const listProduct = data.map(product => ({
+        ...product,
+        priceFormated: formatPrice(product.price),
+      }));
+
+      setProducts(listProduct);
+    }
+
     getProdutcs();
   }, []);
 
@@ -39,7 +44,10 @@ function Home({ amount, cart, addToCartRequest }) {
             <strong>{product.title}</strong>
             <span>{product.priceFormated}</span>
 
-            <button type="button" onClick={() => addToCartRequest(product.id)}>
+            <button
+              type="button"
+              onClick={() => dispatch(CardActions.addToCartRequest(product.id))}
+            >
               <div>
                 <MdAddShoppingCart size={16} color="#fff" />
                 {amount[product.id] || 0}
@@ -52,17 +60,3 @@ function Home({ amount, cart, addToCartRequest }) {
     </ProductList>
   );
 }
-
-const mapStateToProps = ({ cart }) => ({
-  cart,
-  amount: cart.list.reduce((amount, product) => {
-    amount[product.id] = product.amount || 0;
-    return amount;
-  }, {}),
-});
-const mapDispatchToProps = dispatch => bindActionCreators(CardActions, dispatch);
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Home);
